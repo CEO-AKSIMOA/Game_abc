@@ -1,8 +1,6 @@
 // script.js
 const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const letterContainer = document.querySelector('.letter-container');
-const restoreButton = document.getElementById('restore-button');
-const resetButton = document.getElementById('reset-button');
 const scoreDisplay = document.getElementById('score-value');
 let score = 0;
 
@@ -60,5 +58,27 @@ function updateScoreDisplay() {
   scoreDisplay.textContent = score;
 }
 
-restoreButton.addEventListener('click', restoreLastLetter);
-resetButton.addEventListener('click', resetAllLetters);
+// Keyboard event listener
+document.addEventListener('keydown', event => {
+  const pressedKey = event.key.toUpperCase();
+  if (pressedKey === 'BACKSPACE') {
+    restoreLastLetter();
+  } else if (letters.includes(pressedKey)) {
+    removeLetter(pressedKey);
+  }
+});
+
+// Handle click events for letter tiles
+letterContainer.addEventListener('click', event => {
+  if (event.target.classList.contains('letter-tile')) {
+    const letter = event.target.dataset.letter;
+    removeLetter(letter);
+  }
+});
+
+// Reset using Shift key
+document.addEventListener('keydown', event => {
+  if (event.key === 'Shift') {
+    resetAllLetters();
+  }
+});
