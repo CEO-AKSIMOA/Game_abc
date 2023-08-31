@@ -2,6 +2,7 @@
 const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const letterContainer = document.querySelector('.letter-container');
 const restoreButton = document.getElementById('restore-button');
+const resetButton = document.getElementById('reset-button');
 const scoreDisplay = document.getElementById('score-value');
 let score = 0;
 
@@ -43,19 +44,21 @@ function restoreLastLetter() {
   }
 }
 
+// Function to reset all letters
+function resetAllLetters() {
+  const letterTiles = document.querySelectorAll('.letter-tile');
+  letterTiles.forEach(tile => {
+    tile.style.display = 'flex';
+  });
+  removedLetters.length = 0;
+  score = 0;
+  updateScoreDisplay();
+}
+
 // Function to update score display
 function updateScoreDisplay() {
   scoreDisplay.textContent = score;
 }
 
-// Handle keyboard events
-document.addEventListener('keydown', (event) => {
-  const pressedKey = event.key.toUpperCase();
-  if (letters.includes(pressedKey)) {
-    removeLetter(pressedKey);
-  } else if (pressedKey === 'BACKSPACE') {
-    restoreLastLetter();
-  }
-});
-
 restoreButton.addEventListener('click', restoreLastLetter);
+resetButton.addEventListener('click', resetAllLetters);
