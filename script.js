@@ -12,17 +12,14 @@ for (let letter of letters) {
   letterTile.classList.add('letter-tile');
   letterTile.textContent = letter;
   letterTile.dataset.letter = letter;
-  letterTile.addEventListener('click', () => {
-    removeLetter(letter);
-  });
   letterContainer.appendChild(letterTile);
 }
 
 // Function to remove a letter
-function removeLetter(letter) {
-  const letterTile = document.querySelector(`.letter-tile[data-letter="${letter}"]`);
-  if (!removedLetters.includes(letter) && letterTile) {
-    letterTile.style.display = 'none';
+function removeLetter(tile) {
+  const letter = tile.dataset.letter;
+  if (!removedLetters.includes(letter)) {
+    tile.style.opacity = '0'; // Mengubah opasitas menjadi 0
     removedLetters.push(letter);
     score += 10;
     updateScoreDisplay();
@@ -35,7 +32,7 @@ function restoreLastLetter() {
     const lastRemovedLetter = removedLetters.pop();
     const letterTile = document.querySelector(`.letter-tile[data-letter="${lastRemovedLetter}"]`);
     if (letterTile) {
-      letterTile.style.display = 'flex';
+      letterTile.style.opacity = '1'; // Mengembalikan opasitas menjadi 1
       score -= 10;
       updateScoreDisplay();
     }
@@ -46,7 +43,7 @@ function restoreLastLetter() {
 function resetAllLetters() {
   const letterTiles = document.querySelectorAll('.letter-tile');
   letterTiles.forEach(tile => {
-    tile.style.display = 'flex';
+    tile.style.opacity = '1'; // Mengembalikan opasitas menjadi 1
   });
   removedLetters.length = 0;
   score = 0;
@@ -64,15 +61,10 @@ document.addEventListener('keydown', event => {
   if (pressedKey === 'BACKSPACE') {
     restoreLastLetter();
   } else if (letters.includes(pressedKey)) {
-    removeLetter(pressedKey);
-  }
-});
-
-// Handle click events for letter tiles
-letterContainer.addEventListener('click', event => {
-  if (event.target.classList.contains('letter-tile')) {
-    const letter = event.target.dataset.letter;
-    removeLetter(letter);
+    const letterTile = document.querySelector(`.letter-tile[data-letter="${pressedKey}"]`);
+    if (letterTile) {
+      removeLetter(letterTile);
+    }
   }
 });
 
@@ -80,5 +72,13 @@ letterContainer.addEventListener('click', event => {
 document.addEventListener('keydown', event => {
   if (event.key === 'Shift') {
     resetAllLetters();
+  }
+});
+
+// Click event listener for letter tiles
+letterContainer.addEventListener('click', event => {
+  if (event.target.classList.contains('letter-tile')) {
+    const letterTile = event.target;
+    removeLetter(letterTile);
   }
 });
