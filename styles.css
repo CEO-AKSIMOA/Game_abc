@@ -37,6 +37,7 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 24px;
+    font-weight: bold; /* Menjadikan teks menjadi bold */
     cursor: pointer;
     border-radius: 50%;
     margin: 5px;
